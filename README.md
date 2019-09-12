@@ -1,1 +1,1 @@
-# auto-add-id-to-headings
+# Automatically Add Id to Headings
