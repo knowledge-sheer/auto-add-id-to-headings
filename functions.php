@@ -177,14 +177,24 @@ function create_slug_from_title( $title, $raw_title = '', $context = 'display' )
 	return $title;
 }
 
-function auto_add_id_headings( $content ) {
-	$content = preg_replace_callback( '/(\<h[1-6](.*?))\>(.*)(<\/h[1-6]>)/i', function( $matches ) {
-		if ( ! stripos( $matches[0], 'id=' ) ) :
-			$matches[0] = $matches[1] . $matches[2] . ' id="' . create_slug_from_title( $matches[3] ) . '">' . $matches[3] . $matches[4];
-		endif;
-		return $matches[0];
-	}, $content );
-	return $content;
+function add_id_to_header_tags( $content ) {
+
+    $pattern = '#(?P<full_tag><(?P<tag_name>h\d)(?P<tag_extra>[^>]*)>(?P<tag_contents>[^<]*)</h\d>)#i';
+    if ( preg_match_all( $pattern, $content, $matches, PREG_SET_ORDER ) ) {
+        $find = array();
+        $replace = array();
+        foreach( $matches as $match ) {
+            if ( strlen( $match['tag_extra'] ) && false !== stripos( $match['tag_extra'], 'id=' ) ) {
+                continue;
+            }
+            $find[]    = $match['full_tag'];
+            $id        = create_slug_from_title( $match['tag_contents'] );
+            $id_attr   = sprintf( ' id="%s"', $id );
+            $replace[] = sprintf( '<%1$s%2$s%3$s>%4$s</%1$s>', $match['tag_name'], $match['tag_extra'], $id_attr, $match['tag_contents']);
+        }
+        $content = str_replace( $find, $replace, $content );
+    }
+    return $content;
 }
 
 ?>

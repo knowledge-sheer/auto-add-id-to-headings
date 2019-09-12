@@ -3,7 +3,7 @@ include 'functions.php';
 
 if (isset($_POST['submit'])) {
 	$content = $_POST['content'];
-	$content = auto_add_id_headings($content);
+	$content = add_id_to_header_tags($content);
 }
 ?>
 
