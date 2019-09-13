@@ -189,7 +189,7 @@ function add_id_to_header_tags( $content ) {
             }
             $find[]    = $match['full_tag'];
             $id        = create_slug_from_title( $match['tag_contents'] );
-            $id_attr   = sprintf( ' id="%s" class="toc-item"', $id );
+            $id_attr   = sprintf( ' id="%s"', $id );
             $replace[] = sprintf( '<%1$s%2$s%3$s>%4$s</%1$s>', $match['tag_name'], $match['tag_extra'], $id_attr, $match['tag_contents']);
         }
         $content = str_replace( $find, $replace, $content );
